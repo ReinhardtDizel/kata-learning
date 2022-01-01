@@ -18,8 +18,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
         String createTable =
                 "create table if not exists user (ID bigint NOT NULL AUTO_INCREMENT, " +
-                        "LASTNAME varchar(40) NOT NULL, " +
                         "NAME varchar(40) NOT NULL, " +
+                        "LASTNAME varchar(40) NOT NULL, " +
                         "AGE tinyint, PRIMARY KEY (ID));";
 
         try (Connection connection = Util.getMySQLConnection();
