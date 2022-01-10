@@ -16,15 +16,12 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void createUsersTable() {
 
-        String createTable =
-                "create table if not exists user (ID bigint NOT NULL AUTO_INCREMENT, " +
-                        "LASTNAME varchar(40) NOT NULL, " +
-                        "NAME varchar(40) NOT NULL, " +
-                        "AGE tinyint, PRIMARY KEY (ID));";
-
         try (Connection connection = Util.getMySQLConnection();
              Statement statement = connection.createStatement()) {
-            statement.executeUpdate(createTable);
+            statement.executeUpdate("create table if not exists user (ID bigint NOT NULL AUTO_INCREMENT, " +
+                    "LASTNAME varchar(40) NOT NULL, " +
+                    "NAME varchar(40) NOT NULL, " +
+                    "AGE tinyint, PRIMARY KEY (ID));");
         } catch (SQLException | ClassNotFoundException sqlException) {
             sqlException.printStackTrace();
         }
@@ -32,11 +29,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
 
-        String dropTable = "drop table if exists user;";
-
         try (Connection connection = Util.getMySQLConnection();
              Statement statement = connection.createStatement()) {
-            statement.execute(dropTable);
+            statement.execute("drop table if exists user;");
         } catch (SQLException | ClassNotFoundException sqlException) {
             sqlException.printStackTrace();
         }
@@ -45,12 +40,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
 
-        String saveUser =
-                "Insert into user (NAME, LASTNAME, AGE)" +
-                        "values (?, ?, ?)";
-
         try (Connection connection = Util.getMySQLConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(saveUser)) {
+             PreparedStatement preparedStatement = connection.prepareStatement("Insert into user (NAME, LASTNAME, AGE)" +
+                     "values (?, ?, ?)")) {
             preparedStatement.setString(1, name);
             preparedStatement.setString(2, lastName);
             preparedStatement.setByte(3, age);
@@ -62,11 +54,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void removeUserById(long id) {
 
-        String removeUserById =
-                "delete from user where id=?";
-
         try (Connection connection = Util.getMySQLConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(removeUserById)) {
+             PreparedStatement preparedStatement = connection.prepareStatement("delete from user where id=?")) {
             preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException | ClassNotFoundException sqlException) {
@@ -77,12 +66,10 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
 
         List<User> users = new ArrayList<>();
-        String getAllUsers =
-                "select * from user";
 
         try (Connection connection = Util.getMySQLConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(getAllUsers)) {
-            ResultSet resultSet = preparedStatement.executeQuery(getAllUsers);
+             PreparedStatement preparedStatement = connection.prepareStatement("select * from user")) {
+            ResultSet resultSet = preparedStatement.executeQuery("select * from user");
             while (resultSet.next()) {
                 User user = new User();
                 user.setId(resultSet.getLong("ID"));
@@ -100,12 +87,9 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
 
-        String clearUserTable =
-                "truncate table user";
-
         try (Connection connection = Util.getMySQLConnection();
              Statement statement = connection.createStatement()) {
-            statement.executeUpdate(clearUserTable);
+            statement.executeUpdate("truncate table user");
         } catch (SQLException | ClassNotFoundException sqlException) {
             sqlException.printStackTrace();
         }
